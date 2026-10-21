@@ -20,4 +20,4 @@
 - HTML/CSS/JS-пен кемінде 3 адаптивті статикалық бет.
 
 ## GitHub коммиттері
-<repo сілтемесін қой>/commits/main
+<repo https://github.com/171219kz777-code/library_system>/commits/main
