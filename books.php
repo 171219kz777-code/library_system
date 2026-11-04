@@ -1,97 +1,47 @@
-<!DOCTYPE html>
-<html lang="kk">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Кітаптар — Кітапхана</title>
-<link rel="stylesheet" href="../assets/css/style.css">
-</head>
-<body>
-<header class="site-header">
-  <div class="container nav">
-    <a class="logo" href="index.html"> Кітапхана</a>
-    <button class="menu-btn" id="menuBtn" aria-label="Мәзір" aria-expanded="false">☰</button>
-    <nav id="menu">
-      <a href="index.html">Басты бет</a>
-      <a href="books.html" class="active">Кітаптар</a>
-      <a href="login.html">Кіру</a>
-      <a href="register.html" class="btn-sm">Тіркелу</a>
-    </nav>
-  </div>
-</header>
-<main class="container">
+<?php
+$pageTitle = 'Кітаптар';
+$active = 'books';
+include __DIR__ . '/../includes/header.php';
+
+$q     = trim($_GET['q'] ?? '');
+$genre = $_GET['genre'] ?? '';
+$sort  = $_GET['sort'] ?? 'title';
+if (!in_array($genre, $genres, true)) $genre = '';            
+if (!in_array($sort, ['title', 'author', 'year'], true)) $sort = 'title';
+if (mb_strlen($q) > 100) $q = mb_substr($q, 0, 100);
+
+$result = array_filter($books, function ($b) use ($q, $genre) {
+    if ($genre !== '' && $b['genre'] !== $genre) return false;
+    if ($q !== '' && mb_stripos($b['title'] . ' ' . $b['author'], $q) === false) return false;
+    return true;
+});
+
+uasort($result, function ($a, $b) use ($sort) {
+    return $sort === 'year' ? $b['year'] <=> $a['year'] : strcmp($a[$sort], $b[$sort]);
+});
+?>
 <h1>Кітаптар каталогы</h1>
-<div class="filters">
-  <input type="search" id="q" placeholder="Атауы немесе авторы" aria-label="Іздеу">
-  <select id="genre" aria-label="Жанр">
+<form method="get" action="books.php" class="filters">
+  <input type="search" name="q" value="<?= e($q) ?>" placeholder="Кітап атауы немесе авторы" aria-label="Іздеу">
+  <select name="genre" aria-label="Жанр">
     <option value="">Барлық жанр</option>
-    <option>Роман</option><option>Тарих</option><option>Ғылыми</option>
-    <option>Балаларға</option><option>Бағдарламалау</option>
+    <?php foreach ($genres as $g): ?>
+      <option value="<?= e($g) ?>" <?= $genre === $g ? 'selected' : '' ?>><?= e($g) ?></option>
+    <?php endforeach; ?>
   </select>
-  <select id="sort" aria-label="Сұрыптау">
-    <option value="title">Атауы бойынша</option>
-    <option value="author">Авторы бойынша</option>
-    <option value="year">Жылы бойынша (жаңасы)</option>
+  <select name="sort" aria-label="Сұрыптау">
+    <option value="title"  <?= $sort==='title'  ? 'selected' : '' ?>>Атауы бойынша</option>
+    <option value="author" <?= $sort==='author' ? 'selected' : '' ?>>Авторы бойынша</option>
+    <option value="year"   <?= $sort==='year'   ? 'selected' : '' ?>>Жылы бойынша (жаңасы)</option>
   </select>
-  <button class="btn btn-light" id="reset" type="button">Тазалау</button>
+  <button class="btn" type="submit">🔎 Іздеу</button>
+  <a class="btn btn-light" href="books.php">Тазалау</a>
+</form>
+<p class="muted">Табылды: <?= count($result) ?></p>
+<?php if (!$result): ?>
+  <div class="card" style="text-align:center;padding:30px">Ештеңе табылмады </div>
+<?php endif; ?>
+<div class="grid">
+<?php foreach ($result as $id => $b) echo book_card($id, $b); ?>
 </div>
-<p class="muted">Табылды: <span id="count">0</span></p>
-<div class="card empty" id="empty">Ештеңе табылмады.</div>
-<div class="grid" id="bookList">
-    <a class="card book" href="#" data-title="Абай жолы" data-author="Мұхтар Әуезов" data-genre="Роман" data-year="1942">
-      <div class="cover"></div>
-      <h3>Абай жолы</h3>
-      <p>Мұхтар Әуезов, 1942</p>
-      <span class="tag">Роман</span> <span class="tag free">Бос</span>
-    </a>
-    <a class="card book" href="#" data-title="Көшпенділер" data-author="Ілияс Есенберлин" data-genre="Тарих" data-year="1976">
-      <div class="cover"></div>
-      <h3>Көшпенділер</h3>
-      <p>Ілияс Есенберлин, 1976</p>
-      <span class="tag">Тарих</span> <span class="tag free">Бос</span>
-    </a>
-    <a class="card book" href="#" data-title="Қан мен тер" data-author="Әбдіжәміл Нұрпейісов" data-genre="Роман" data-year="1970">
-      <div class="cover"></div>
-      <h3>Қан мен тер</h3>
-      <p>Әбдіжәміл Нұрпейісов, 1970</p>
-      <span class="tag">Роман</span> <span class="tag busy">Бос емес</span>
-    </a>
-    <a class="card book" href="#" data-title="Ұйқыдағы қыз" data-author="Ғабит Мүсірепов" data-genre="Роман" data-year="1957">
-      <div class="cover"></div>
-      <h3>Ұйқыдағы қыз</h3>
-      <p>Ғабит Мүсірепов, 1957</p>
-      <span class="tag">Роман</span> <span class="tag free">Бос</span>
-    </a>
-    <a class="card book" href="#" data-title="PHP және MySQL" data-author="Лук Веллинг" data-genre="Бағдарламалау" data-year="2015">
-      <div class="cover"></div>
-      <h3>PHP және MySQL</h3>
-      <p>Лук Веллинг, 2015</p>
-      <span class="tag">Бағдарламалау</span> <span class="tag free">Бос</span>
-    </a>
-    <a class="card book" href="#" data-title="Алгоритмдер" data-author="Т. Кормен" data-genre="Ғылыми" data-year="2009">
-      <div class="cover"></div>
-      <h3>Алгоритмдер</h3>
-      <p>Т. Кормен, 2009</p>
-      <span class="tag">Ғылыми</span> <span class="tag free">Бос</span>
-    </a>
-    <a class="card book" href="#" data-title="Қазақ халқының ертегілері" data-author="Халық ауыз әдебиеті" data-genre="Балаларға" data-year="1990">
-      <div class="cover"></div>
-      <h3>Қазақ халқының ертегілері</h3>
-      <p>Халық ауыз әдебиеті, 1990</p>
-      <span class="tag">Балаларға</span> <span class="tag free">Бос</span>
-    </a>
-    <a class="card book" href="#" data-title="Қазақ хандығының тарихы" data-author="Б. Кәрібаев" data-genre="Тарих" data-year="2011">
-      <div class="cover"></div>
-      <h3>Қазақ хандығының тарихы</h3>
-      <p>Б. Кәрібаев, 2011</p>
-      <span class="tag">Тарих</span> <span class="tag free">Бос</span>
-    </a>
-</div>
-<div class="pagination">
-  <a href="#" class="active">1</a><a href="#">2</a><a href="#">3</a>
-</div>
-</main>
-<footer class="site-footer"><div class="container">© 2026 Онлайн кітапхана жүйесі</div></footer>
-<script src="../assets/js/main.js"></script>
-</body>
-</html>
+<?php include __DIR__ . '/../includes/footer.php'; ?>
