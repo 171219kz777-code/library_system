@@ -27,4 +27,4 @@
 - Кіру, `session_start()`, шығу (`logout.php`), жабық беттерді қорғау.
 
 ## GitHub
-Репозиторий: 
+Репозиторий: https://github.com/171219kz777-code/library_system.git
