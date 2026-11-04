@@ -5,7 +5,6 @@ $errors = [];
 $success = false;
 $name = $email = '';
 
-// $_POST арқылы форманы өңдеу және серверде тексеру
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $name   = trim($_POST['name'] ?? '');
     $email  = trim($_POST['email'] ?? '');
