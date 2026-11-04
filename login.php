@@ -1,45 +1,42 @@
-<!DOCTYPE html>
-<html lang="kk">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Кіру — Кітапхана</title>
-<link rel="stylesheet" href="../assets/css/style.css">
-</head>
-<body>
-<header class="site-header">
-  <div class="container nav">
-    <a class="logo" href="index.html"> Кітапхана</a>
-    <button class="menu-btn" id="menuBtn" aria-label="Мәзір" aria-expanded="false">☰</button>
-    <nav id="menu">
-      <a href="index.html">Басты бет</a>
-      <a href="books.html">Кітаптар</a>
-      <a href="login.html" class="active">Кіру</a>
-      <a href="register.html" class="btn-sm">Тіркелу</a>
-    </nav>
+<?php
+$pageTitle = 'Кіру';
+$active = 'login';
+$errors = [];
+$success = false;
+$email = '';
+
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    $email = trim($_POST['email'] ?? '');
+    $pass  = $_POST['password'] ?? '';
+    if (!filter_var($email, FILTER_VALIDATE_EMAIL)) $errors['email'] = 'Email дұрыс емес.';
+    if ($pass === '')                               $errors['password'] = 'Парольді енгізіңіз.';
+    if (!$errors) {
+        $success = true;       
+    }
+}
+include __DIR__ . '/../includes/header.php';
+?>
+<div class="auth-wrap">
+  <div class="auth-side"><h2>Қош келдің! 👋</h2><p>Кіріп, кітаптарды қарызға ал, өз қарыздарыңды қара.</p></div>
+  <div class="auth-form">
+    <h1>Кіру</h1>
+    <?php if ($success): ?>
+      <div class="alert ok">Форма дұрыс толтырылған. (Нақты кіру жүйесі 11-аптада қосылады.)</div>
+      <a class="btn" href="books.php">Кітаптарға өту</a>
+    <?php else: ?>
+    <form method="post" action="login.php" data-validate novalidate>
+      <label>Email
+        <input type="email" name="email" value="<?= e($email) ?>" placeholder="name@mail.kz" class="<?= isset($errors['email']) ? 'invalid' : '' ?>" required>
+        <span class="field-error" <?= isset($errors['email']) ? 'style="display:block"' : '' ?>><?= e($errors['email'] ?? '') ?></span>
+      </label>
+      <label>Пароль
+        <span class="pw-wrap"><input type="password" name="password" class="<?= isset($errors['password']) ? 'invalid' : '' ?>" required><button type="button" class="pw-toggle">Көрсету</button></span>
+        <span class="field-error" <?= isset($errors['password']) ? 'style="display:block"' : '' ?>><?= e($errors['password'] ?? '') ?></span>
+      </label>
+      <button class="btn btn-block" type="submit">Кіру</button>
+    </form>
+    <p>Аккаунт жоқ па? <a href="register.php">Тіркелу</a></p>
+    <?php endif; ?>
   </div>
-</header>
-<main class="container">
-<div class="card form-card">
-  <h1>Кіру</h1>
-  <form method="post" action="#" data-validate novalidate>
-    <label>Email
-      <input type="email" name="email" placeholder="name@mail.kz" required>
-      <span class="field-error"></span>
-    </label>
-    <label>Пароль
-      <span class="pw-wrap">
-        <input type="password" name="password" required>
-        <button type="button" class="pw-toggle">Көрсету</button>
-      </span>
-      <span class="field-error"></span>
-    </label>
-    <button class="btn" type="submit">Кіру</button>
-  </form>
-  <p>Аккаунт жоқ па? <a href="register.html">Тіркелу</a></p>
 </div>
-</main>
-<footer class="site-footer"><div class="container">© 2026 Онлайн кітапхана жүйесі</div></footer>
-<script src="../assets/js/main.js"></script>
-</body>
-</html>
+<?php include __DIR__ . '/../includes/footer.php'; ?>
