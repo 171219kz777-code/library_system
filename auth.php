@@ -1,0 +1,16 @@
+<?php
+session_start();
+
+require_once __DIR__ . '/../config/db.php';
+require_once __DIR__ . '/functions.php';
+
+function is_logged_in() {
+    return isset($_SESSION['user_id']);
+}
+
+function require_login() {
+    if (!is_logged_in()) {
+        header('Location: login.php');
+        exit;
+    }
+}
