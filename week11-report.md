@@ -30,5 +30,4 @@
 - Барлық сұраныста prepared statements қолдану.
 
 ## GitHub
-Репозиторий: <сілтемені қой>
-Коммиттер: <сілтеме>/commits/main
+Репозиторий: https://github.com/171219kz777-code/library_system.git
