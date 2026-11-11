@@ -1,122 +1,83 @@
-:root{
-  --bg:#f6f4ef; --card:#fff; --ink:#22252b; --muted:#6b7280;
-  --accent:#8b4a2b; --accent-d:#6e3a21; --line:#e5e1d8; --soft:#f0e6d8;
-  --err:#b42318; --ok:#1a7f4b;
-}
-*{box-sizing:border-box}
-body{margin:0;font-family:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;background:var(--bg);color:var(--ink);line-height:1.5}
-a{color:var(--accent)}
-img{max-width:100%}
-.container{max-width:1080px;margin:0 auto;padding:0 16px}
+<?php
+require_once __DIR__ . '/../includes/auth.php';
 
-.site-header{background:var(--card);border-bottom:1px solid var(--line);position:sticky;top:0;z-index:10}
-.nav{display:flex;align-items:center;justify-content:space-between;min-height:60px;flex-wrap:wrap}
-.logo{font-weight:700;font-size:1.2rem;text-decoration:none;color:var(--ink)}
-nav{display:flex;gap:18px;align-items:center;flex-wrap:wrap}
-nav a{text-decoration:none;color:var(--ink)}
-nav a:hover,nav a.active{color:var(--accent)}
-nav a.btn-sm{background:var(--accent);color:#fff;padding:6px 14px;border-radius:8px}
-nav a.btn-sm:hover{background:var(--accent-d);color:#fff}
-.menu-btn{display:none;background:none;border:0;font-size:1.7rem;cursor:pointer;color:var(--ink)}
-
-main.container{padding:28px 16px;min-height:70vh}
-
-.btn{display:inline-block;background:var(--accent);color:#fff;border:0;padding:10px 20px;border-radius:8px;font:inherit;cursor:pointer;text-decoration:none}
-.btn:hover{background:var(--accent-d)}
-.btn-light{background:#ece8df;color:var(--ink)}
-.btn-light:hover{background:#ddd7c9}
-input,select,textarea{width:100%;padding:10px 12px;border:1px solid var(--line);border-radius:8px;font:inherit;background:#fff}
-input:focus,select:focus{outline:2px solid var(--soft);border-color:var(--accent)}
-label{display:block;margin-bottom:14px;font-size:.92rem}
-label input{margin-top:4px}
-.card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:20px}
-.form-card{max-width:420px;margin:24px auto}
-.alert{padding:10px 14px;border-radius:8px;margin-bottom:14px}
-.alert.err{background:#fde8e6;color:var(--err)}
-.hint{font-size:.8rem;color:var(--muted)}
-.field-error{display:none;color:var(--err);font-size:.82rem;margin-top:2px}
-input.invalid{border-color:var(--err)}
-.pw-wrap{position:relative}
-.pw-toggle{position:absolute;right:8px;top:50%;transform:translateY(-50%);margin-top:2px;background:none;border:0;cursor:pointer;color:var(--muted);font-size:.85rem}
-
-.hero{text-align:center;padding:64px 20px;background:linear-gradient(135deg,#8b4a2b,#5c2e18);color:#fff;border-radius:18px;margin-bottom:32px;box-shadow:0 10px 30px rgba(92,46,24,.25)}
-.hero h1{margin:0 0 10px;font-size:2.5rem}
-.hero p{color:#f3e3d3;margin:0;font-size:1.1rem}
-.hero .btn{background:#f0b252;color:#3a1d0e;font-weight:600}
-.hero .btn:hover{background:#e6a03a}
-.hero-search{display:flex;gap:8px;max-width:520px;margin:22px auto 0}
-
-.features{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-bottom:32px}
-.feature{text-align:center}
-.feature .ico{font-size:2rem}
-.feature h3{margin:8px 0 4px}
-.feature p{margin:0;color:var(--muted);font-size:.92rem}
-
-.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:16px}
-.book{text-decoration:none;color:inherit;display:block;transition:transform .15s,box-shadow .15s}
-.book:hover{transform:translateY(-3px);box-shadow:0 6px 18px rgba(0,0,0,.08)}
-.cover{height:170px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:3rem;background:linear-gradient(135deg,#efe3cf,#e2cfae)}
-.book h3{margin:10px 0 4px;font-size:1.05rem}
-.book p{margin:0 0 8px;color:var(--muted);font-size:.9rem}
-.tag{display:inline-block;background:var(--soft);color:var(--accent-d);padding:2px 10px;border-radius:999px;font-size:.8rem}
-.tag.free{background:#e3f5ea;color:var(--ok)}
-.tag.busy{background:#fde8e6;color:var(--err)}
-
-.filters{display:grid;grid-template-columns:2fr 1.2fr 1fr auto;gap:8px;margin-bottom:12px}
-.muted{color:var(--muted)}
-.empty{display:none;text-align:center;padding:30px}
-.pagination{display:flex;gap:6px;justify-content:center;margin:26px 0;flex-wrap:wrap}
-.pagination a{padding:6px 12px;border:1px solid var(--line);border-radius:8px;text-decoration:none;background:#fff}
-.pagination a.active{background:var(--accent);color:#fff;border-color:var(--accent)}
-
-.site-footer{text-align:center;padding:20px;color:var(--muted);border-top:1px solid var(--line)}
-
-@media(max-width:760px){
-  .menu-btn{display:block}
-  nav{display:none;width:100%;flex-direction:column;align-items:flex-start;gap:10px;padding:8px 0 14px}
-  nav.open{display:flex}
-  .features{grid-template-columns:1fr}
-  .filters{grid-template-columns:1fr 1fr}
-  .filters input[type=search]{grid-column:1 / -1}
-  .hero h1{font-size:1.7rem}
-  .hero-search{flex-direction:column}
+if (is_logged_in()) {
+    header('Location: profile.php');
+    exit;
 }
 
-.btn{font-weight:600;transition:background .15s,transform .1s}
-.btn:active{transform:scale(.97)}
-.btn-block{width:100%;padding:12px}
-.btn-outline{background:#fff;color:var(--accent);border:2px solid var(--accent)}
-.btn-outline:hover{background:var(--accent);color:#fff}
-.btn-row{display:flex;gap:8px;margin-top:12px}
-.btn-row .btn{flex:1;text-align:center;padding:8px 10px;font-size:.9rem}
-h1{margin-top:0}
-.section-title{display:flex;justify-content:space-between;align-items:center;margin:8px 0 16px}
-.section-title h2{margin:0}
-.feature{transition:transform .15s}
-.feature:hover{transform:translateY(-3px)}
-.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-bottom:32px;text-align:center}
-.stats b{display:block;font-size:1.8rem;color:var(--accent)}
-.stats span{color:var(--muted);font-size:.9rem}
-.filters{grid-template-columns:2fr 1.2fr 1fr auto auto}
-.auth-wrap{display:grid;grid-template-columns:1fr 1fr;max-width:820px;margin:20px auto;border:1px solid var(--line);border-radius:18px;overflow:hidden;background:#fff}
-.auth-side{background:linear-gradient(135deg,#8b4a2b,#5c2e18);color:#fff;padding:36px 28px;display:flex;flex-direction:column;justify-content:center}
-.auth-side h2{margin:0 0 10px;font-size:1.6rem}
-.auth-side p{color:#f3e3d3}
-.auth-form{padding:32px 28px}
-.auth-form h1{margin-bottom:18px}
-.cover.c1{background:linear-gradient(135deg,#f6d8b8,#e5a86c)}
-.cover.c2{background:linear-gradient(135deg,#cfe3d4,#8dbf9b)}
-.cover.c3{background:linear-gradient(135deg,#cfdcf0,#8aa8d8)}
-.cover.c4{background:linear-gradient(135deg,#ecd2e6,#c58bb8)}
-@media(max-width:760px){
-  .auth-wrap{grid-template-columns:1fr}
-  .auth-side{padding:22px}
-  .stats b{font-size:1.4rem}
-  .filters{grid-template-columns:1fr 1fr}
-  .filters input[type=search]{grid-column:1 / -1}
+$errors = [];
+$name = '';
+$email = '';
+
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    $name  = trim($_POST['name'] ?? '');
+    $email = trim($_POST['email'] ?? '');
+    $pass  = $_POST['password'] ?? '';
+    $pass2 = $_POST['password2'] ?? '';
+
+    // 1. Деректерді тексеру
+    if (mb_strlen($name) < 2 || mb_strlen($name) > 100) {
+        $errors['name'] = 'Аты 2–100 таңба болуы керек.';
+    }
+    if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+        $errors['email'] = 'Email дұрыс емес.';
+    }
+    if (strlen($pass) < 6) {
+        $errors['password'] = 'Пароль кемінде 6 таңба болуы керек.';
+    }
+    if ($pass !== $pass2) {
+        $errors['password2'] = 'Парольдер сәйкес емес.';
+    }
+
+    if (!$errors) {
+        $stmt = $pdo->prepare('SELECT id FROM users WHERE email = ?');
+        $stmt->execute([$email]);
+        if ($stmt->fetch()) {
+            $errors['email'] = 'Бұл email бұрын тіркелген.';
+        }
+    }
+
+    if (!$errors) {
+        $hash = password_hash($pass, PASSWORD_DEFAULT);   // парольді хэштеу
+        $stmt = $pdo->prepare('INSERT INTO users (name, email, password_hash) VALUES (?, ?, ?)');
+        $stmt->execute([$name, $email, $hash]);
+
+        $_SESSION['flash'] = 'Тіркелу сәтті өтті! Енді жүйеге кіре аласың.';
+        header('Location: login.php');
+        exit;
+    }
 }
 
-.alert.ok{background:#e3f5ea;color:var(--ok)}
-.detail{display:grid;grid-template-columns:280px 1fr;gap:24px}
-.detail .cover{height:340px;font-size:5rem}
-@media(max-width:760px){.detail{grid-template-columns:1fr}}
+$pageTitle = 'Тіркелу';
+$active = 'register';
+include __DIR__ . '/../includes/header.php';
+?>
+<div class="auth-wrap">
+  <div class="auth-side"><h2>Бізге қосыл 📚</h2><p>Тіркеліп, кітаптарды онлайн қарызға ал.</p></div>
+  <div class="auth-form">
+    <h1>Тіркелу</h1>
+    <form method="post" action="register.php" data-validate novalidate>
+      <label>Аты-жөні
+        <input type="text" name="name" value="<?= e($name) ?>" class="<?= isset($errors['name']) ? 'invalid' : '' ?>" required>
+        <span class="field-error" <?= isset($errors['name']) ? 'style="display:block"' : '' ?>><?= e($errors['name'] ?? '') ?></span>
+      </label>
+      <label>Email
+        <input type="email" name="email" value="<?= e($email) ?>" placeholder="name@mail.kz" class="<?= isset($errors['email']) ? 'invalid' : '' ?>" required>
+        <span class="field-error" <?= isset($errors['email']) ? 'style="display:block"' : '' ?>><?= e($errors['email'] ?? '') ?></span>
+      </label>
+      <label>Пароль
+        <span class="pw-wrap"><input type="password" name="password" class="<?= isset($errors['password']) ? 'invalid' : '' ?>" required><button type="button" class="pw-toggle">Көрсету</button></span>
+        <span class="hint">Кемінде 6 таңба</span>
+        <span class="field-error" <?= isset($errors['password']) ? 'style="display:block"' : '' ?>><?= e($errors['password'] ?? '') ?></span>
+      </label>
+      <label>Парольді қайталау
+        <input type="password" name="password2" class="<?= isset($errors['password2']) ? 'invalid' : '' ?>" required>
+        <span class="field-error" <?= isset($errors['password2']) ? 'style="display:block"' : '' ?>><?= e($errors['password2'] ?? '') ?></span>
+      </label>
+      <button class="btn btn-block" type="submit">Тіркелу</button>
+    </form>
+    <p>Аккаунт бар ма? <a href="login.php">Кіру</a></p>
+  </div>
+</div>
+<?php include __DIR__ . '/../includes/footer.php'; ?>
