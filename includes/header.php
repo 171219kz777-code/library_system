@@ -1,6 +1,5 @@
 <?php
-require_once __DIR__ . '/functions.php';
-require_once __DIR__ . '/../config/data.php';
+require_once __DIR__ . '/auth.php';          
 $pageTitle = $pageTitle ?? 'Кітапхана';
 $active = $active ?? '';
 ?>
@@ -20,9 +19,19 @@ $active = $active ?? '';
     <nav id="menu">
       <a href="index.php"<?= $active==='index' ? ' class="active"' : '' ?>>Басты бет</a>
       <a href="books.php"<?= $active==='books' ? ' class="active"' : '' ?>>Кітаптар</a>
-      <a href="login.php"<?= $active==='login' ? ' class="active"' : '' ?>>Кіру</a>
-      <a href="register.php" class="btn-sm">Тіркелу</a>
+      <?php if (is_logged_in()): ?>
+        <a href="book_add.php"<?= $active==='add' ? ' class="active"' : '' ?>>+ Кітап қосу</a>
+        <a href="profile.php"<?= $active==='profile' ? ' class="active"' : '' ?>>👤 <?= e($_SESSION['user_name']) ?></a>
+        <a href="logout.php" class="btn-sm">Шығу</a>
+      <?php else: ?>
+        <a href="login.php"<?= $active==='login' ? ' class="active"' : '' ?>>Кіру</a>
+        <a href="register.php" class="btn-sm">Тіркелу</a>
+      <?php endif; ?>
     </nav>
   </div>
 </header>
 <main class="container">
+<?php if (!empty($_SESSION['flash'])): ?>
+  <div class="alert ok"><?= e($_SESSION['flash']) ?></div>
+  <?php unset($_SESSION['flash']); ?>
+<?php endif; ?>
