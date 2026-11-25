@@ -2,6 +2,11 @@
 $pageTitle = 'Басты бет';
 $active = 'index';
 include __DIR__ . '/../includes/header.php';
+
+$bookCount  = $pdo->query('SELECT COUNT(*) FROM books')->fetchColumn();
+$userCount  = $pdo->query('SELECT COUNT(*) FROM users')->fetchColumn();
+$genreCount = $pdo->query('SELECT COUNT(*) FROM genres')->fetchColumn();
+$latest = $pdo->query('SELECT b.*, g.name AS genre FROM books b JOIN genres g ON g.id = b.genre_id ORDER BY b.created_at DESC, b.id DESC LIMIT 4')->fetchAll();
 ?>
 <section class="hero">
   <h1>📚 Онлайн кітапхана</h1>
@@ -13,9 +18,9 @@ include __DIR__ . '/../includes/header.php';
 </section>
 
 <section class="stats">
-  <div class="card"><b><?= count($books) ?></b><span>Кітап</span></div>
-  <div class="card"><b>120</b><span>Оқырман</span></div>
-  <div class="card"><b><?= count($genres) ?></b><span>Жанр</span></div>
+  <div class="card"><b><?= (int)$bookCount ?></b><span>Кітап</span></div>
+  <div class="card"><b><?= (int)$userCount ?></b><span>Оқырман</span></div>
+  <div class="card"><b><?= (int)$genreCount ?></b><span>Жанр</span></div>
 </section>
 
 <section class="features">
@@ -26,6 +31,6 @@ include __DIR__ . '/../includes/header.php';
 
 <div class="section-title"><h2>Жаңа кітаптар</h2><a href="books.php">Барлығын көру →</a></div>
 <div class="grid">
-<?php foreach (array_slice($books, 0, 4, true) as $id => $b) echo book_card($id, $b); ?>
+<?php foreach ($latest as $b) echo book_card($b); ?>
 </div>
 <?php include __DIR__ . '/../includes/footer.php'; ?>
