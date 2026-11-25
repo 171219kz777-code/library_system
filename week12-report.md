@@ -35,5 +35,4 @@
 - Пагинация (бетке бөлу).
 
 ## GitHub
-Репозиторий: <сілтемені қой>
-Коммиттер: <сілтеме>/commits/main
+https://github.com/171219kz777-code/library_system.git
